@@ -16,7 +16,7 @@ page = st.sidebar.selectbox(
 # ---------------- HOME ----------------
 if page == "Home":
 
-    st.title("📚 Studder: Student Study Planner App")
+    st.title("📚 Studder: Study Planner App")
     st.header("Welcome!")
     st.subheader("Organize your study schedule easily")
 
@@ -199,7 +199,7 @@ elif page == "About":
     st.header("What the app does")
 
     st.write(
-        "The Student Study Planner app helps students organize their study schedule. "
+        "The Studder is a Study Planner app helps students organize their study schedule. "
         "Users can create study plans, set study hours, choose subjects, and track their progress."
     )
 
