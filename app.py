@@ -81,7 +81,6 @@ elif page == "Study Planner":
     uploaded_file = st.file_uploader("Upload study materials")
 
     if st.button("Save Study Plan"):
-
     new_plan = {
         "Name": name,
         "Subject": subject,
