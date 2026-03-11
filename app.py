@@ -80,7 +80,8 @@ elif page == "Study Planner":
 
     uploaded_file = st.file_uploader("Upload study materials")
 
-    if st.button("Save Study Plan"):
+if st.button("Save Study Plan"): 
+
     new_plan = {
         "Name": name,
         "Subject": subject,
@@ -92,7 +93,7 @@ elif page == "Study Planner":
         "Difficulty": difficulty,
         "Type": study_type,
         "Priority": priority,
-        "Notes": notes
+        "Notes": notes,
     }
 
     st.session_state.plans.append(new_plan)
