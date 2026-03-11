@@ -3,10 +3,14 @@ import pandas as pd
 
 st.set_page_config(page_title="Studder", layout="wide")
 
+# storage for study plans
+if "plans" not in st.session_state:
+    st.session_state.plans = []
+
 # Sidebar Navigation
 page = st.sidebar.selectbox(
     "Navigation",
-    ["Home", "Study Planner", "Progress", "Resources", "Settings", "About"]
+    ["Home", "Study Planner", "Saved Plans", "Progress", "Resources", "Settings", "About"]
 )
 
 # ---------------- HOME ----------------
@@ -77,34 +81,75 @@ elif page == "Study Planner":
     uploaded_file = st.file_uploader("Upload study materials")
 
     if st.button("Save Study Plan"):
-        st.success("Study plan saved successfully!")
-        st.balloons()
+
+    new_plan = {
+        "Name": name,
+        "Subject": subject,
+        "Category": category,
+        "Date": study_date,
+        "Time": study_time,
+        "Hours": hours,
+        "Topics": ", ".join(topics),
+        "Difficulty": difficulty,
+        "Type": study_type,
+        "Priority": priority,
+        "Notes": notes
+    }
+
+    st.session_state.plans.append(new_plan)
+
+    st.success("Study plan saved successfully!")
+    st.balloons()
+    
+# ---------------- Saved Plans ----------------
+elif page == "Saved Plans":
+
+    st.title("📂 Saved Study Plans")
+
+    if len(st.session_state.plans) == 0:
+        st.warning("No study plans saved yet.")
+
+    else:
+        df = pd.DataFrame(st.session_state.plans)
+
+        st.dataframe(df)
+
+        st.subheader("Review a Plan")
+
+        selected_subject = st.selectbox(
+            "Select a study plan",
+            df["Subject"]
+        )
+
+        selected_plan = df[df["Subject"] == selected_subject]
+
+        st.write(selected_plan)
 
 # ---------------- PROGRESS ----------------
 elif page == "Progress":
 
     st.title("📊 Study Progress")
 
-    st.metric("Subjects Planned", "5")
-    st.metric("Total Study Hours", "12")
-    st.metric("Tasks Completed", "3")
+    if len(st.session_state.plans) == 0:
+        st.warning("No study plans yet.")
 
-    progress_value = st.slider("Study Completion", 0, 100)
+    else:
 
-    st.progress(progress_value)
+        df = pd.DataFrame(st.session_state.plans)
 
-    data = {
-        "Subject": ["Math", "Science", "Programming"],
-        "Hours": [3, 4, 5]
-    }
+        total_subjects = len(df)
+        total_hours = df["Hours"].sum()
 
-    df = pd.DataFrame(data)
+        st.metric("Subjects Planned", total_subjects)
+        st.metric("Total Study Hours", total_hours)
 
-    st.dataframe(df)
+        completion = st.slider("Study Completion", 0, 100)
 
-    st.table(df)
+        st.progress(completion)
 
-    st.success("Keep going! You're making progress.")
+        st.subheader("Study Plan Overview")
+
+        st.dataframe(df)
 
 # ---------------- RESOURCES ----------------
 elif page == "Resources":
